@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "name": "yy.platform.trace",
+      "type": "com.yy.platform.component.starter.configure.TraceConfig",
+      "sourceType": "com.yy.platform.component.starter.configure.TraceConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "yy.platform.trace.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否开启日志链路追踪",
+      "sourceType": "com.yy.platform.component.starter.configure.TraceConfig",
+      "defaultValue": false
+    }
+  ],
+  "hints": []
+}
