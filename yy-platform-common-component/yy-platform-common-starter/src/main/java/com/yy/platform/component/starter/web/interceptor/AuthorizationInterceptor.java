@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,13 +45,13 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         if (annotation != null) {
             return true;
         }
-
-        // 检查token并设置
-        long userId = checkToken(request);
-
-        // TODO 监权
-
-        SecurityContext.setUserId(userId);
+//
+//        // 检查token并设置
+//        long userId = checkToken(request);
+//
+//        // TODO 监权
+//
+//        SecurityContext.setUserId(userId);
         return true;
     }
 
@@ -83,4 +84,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
         return userId;
     }
 
+    @Override
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
+        super.postHandle(request, response, handler, modelAndView);
+    }
 }

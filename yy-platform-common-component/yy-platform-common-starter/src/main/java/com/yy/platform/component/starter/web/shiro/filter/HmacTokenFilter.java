@@ -19,14 +19,12 @@ import org.apache.shiro.web.util.WebUtils;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**基于HMAC（ 散列消息认证码）的无状态认证过滤器
  *
  */
 @Slf4j
-public class HmacFilter extends AccessControlFilter {
+public class HmacTokenFilter extends AccessControlFilter {
 
 
     public static final String LOGIN_TOKEN_KEY = "X-JLXshop-Token";
@@ -50,6 +48,11 @@ public class HmacFilter extends AccessControlFilter {
         return false;//转到拒绝访问处理逻辑
     }
 
+    @Override
+    protected void postHandle(ServletRequest request, ServletResponse response) throws Exception {
+        //TODO refresh token
+    }
+
     /**
      * 拒绝处理
      */
@@ -67,7 +70,7 @@ public class HmacFilter extends AccessControlFilter {
 
         ThreadContext.bind(TokenSubjectUtil.getSubject(token));
 
-        return true;//打住，访问到此为止
+        return true;
     }
 
 

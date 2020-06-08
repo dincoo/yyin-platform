@@ -2,7 +2,7 @@ package com.yy.platform.component.starter.web.shiro.config;
 
 import com.yy.platform.component.starter.web.shiro.HmacRealm;
 import com.yy.platform.component.starter.web.shiro.StatelessDefaultSubjectFactory;
-import com.yy.platform.component.starter.web.shiro.filter.HmacFilter;
+import com.yy.platform.component.starter.web.shiro.filter.HmacTokenFilter;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
@@ -36,7 +36,7 @@ public class ShiroConfig {
         // 自定义过滤器
         Map<String, Filter> filterMap = new HashMap<String, Filter>(1);
 //        filterMap.put("jwt", new NoSessionFilter());
-        filterMap.put("anthc", new HmacFilter());
+        filterMap.put("anthc", new HmacTokenFilter());
         shiroFilterFactoryBean.setFilters(filterMap);
         //过滤器规则
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
@@ -48,7 +48,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/login", "anon");
         // 其余接口一律拦截
         // 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
-         filterChainDefinitionMap.put("/**", "anthc");
+         filterChainDefinitionMap.put("/**", "anon");
 //        filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

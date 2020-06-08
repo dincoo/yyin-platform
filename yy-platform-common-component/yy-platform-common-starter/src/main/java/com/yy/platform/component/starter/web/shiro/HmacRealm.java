@@ -67,6 +67,7 @@ public class HmacRealm extends AuthorizingRealm {
 //        Set<String> roles = accountProvider.loadRoles(clientKey);
 //        info.setRoles(roles);
         // 根据客户标识（可以是用户名、app id等等） 查询并设置权限
+        //TODO 获取权限的内容抽象处理
         Set<String> permissions = new HashSet<>();
         info.setStringPermissions(permissions);
         return info;
