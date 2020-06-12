@@ -1,0 +1,30 @@
+spring:
+  dataSource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/management?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: 123456
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+  cache:
+    type: redis
+server:
+  port: 8084
+
+
+#mybatis-plus:
+#  global-config:
+#    db-config:
+#      id-type: auto
+#      field-strategy: not_empty
+#      column-underline: true #驼峰下划线转换
+#      logic-delete-value: 0 #逻辑删除配置
+#      logic-not-delete-value: 1
+#      db-type: mysql
+#    refresh: false
+#  configuration:
+#    map-underscore-to-camel-case: true
+#    cache-enabled: false

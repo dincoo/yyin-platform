@@ -15,7 +15,7 @@ public interface CommonConstant {
     /**
      * 测试的userid
      */
-    static Long TEST_USER_ID = 1L;
+    static String TEST_USER_ID = "1";
 
 
 

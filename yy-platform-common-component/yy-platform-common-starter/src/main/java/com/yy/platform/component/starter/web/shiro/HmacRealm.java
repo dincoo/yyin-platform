@@ -1,6 +1,10 @@
 package com.yy.platform.component.starter.web.shiro;
 
-import com.google.common.collect.Lists;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.yy.platform.component.starter.exception.AuthException;
+import com.yy.platform.component.starter.util.JwtTokenUtil;
+import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -9,17 +13,20 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 public class HmacRealm extends AuthorizingRealm {
 
     public Class<?> getAuthenticationTokenClass() {
         return HmacToken.class;//此Realm只支持HmacToken
     }
+
+    private final static JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
+
+    @Autowired
+    private TokenSubjectUtil tokenSubjectUtil;
 
     /**
      *  认证
@@ -30,6 +37,8 @@ public class HmacRealm extends AuthorizingRealm {
         HmacToken hmacToken = (HmacToken)token;
 
         // TODO 校验Token有效性
+        checkToken(hmacToken.getClientKey());
+
 //        List<String> keys = Lists.newArrayList();
 //        for (String key:hmacToken.getParameters().keySet()){
 //            if (!"digest".equals(key))
@@ -62,14 +71,38 @@ public class HmacRealm extends AuthorizingRealm {
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String clientKey = (String)principals.getPrimaryPrincipal();
+        LoginUserInfo userDetail = null;
+        String userId = JwtTokenUtil.getUserIdFromToken(clientKey);
+        if(StringUtils.isBlank(userId)){
+            new AuthException("无效token", "checkToken");
+        }
+        userDetail = tokenSubjectUtil.getUser(userId);
+        if(userDetail == null){
+            new AuthException("token失效，请重新登录", "checkToken");
+        }
+
         SimpleAuthorizationInfo info =  new SimpleAuthorizationInfo();
-        // 根据客户标识（可以是用户名、app id等等） 查询并设置角色
-//        Set<String> roles = accountProvider.loadRoles(clientKey);
-//        info.setRoles(roles);
-        // 根据客户标识（可以是用户名、app id等等） 查询并设置权限
-        //TODO 获取权限的内容抽象处理
-        Set<String> permissions = new HashSet<>();
-        info.setStringPermissions(permissions);
+
+        //获取角色与权限的内容
+        info.setStringPermissions(new HashSet<>(userDetail.getApiPerms()));
+        info.setRoles(new HashSet<>(userDetail.getRoles()));
         return info;
+    }
+
+    /**
+     * 进行token的校验
+     * @param token
+     */
+    //TODO 判断存在问题
+    private void checkToken(String token){
+        try {
+            if(!jwtTokenUtil.verifyToken(token)){
+                throw new AuthException("非法请求", "checkToken");
+            }
+        } catch (TokenExpiredException e) {
+            throw new AuthException("token已过期", "checkToken");
+        } catch (Exception e){
+            throw new AuthException("非法请求", "checkToken");
+        }
     }
 }

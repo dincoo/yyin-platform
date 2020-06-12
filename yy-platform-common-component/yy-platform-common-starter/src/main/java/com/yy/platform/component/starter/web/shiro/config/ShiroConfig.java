@@ -45,11 +45,15 @@ public class ShiroConfig {
         // 用户，需要角色权限 “user”
 //        filterChainDefinitionMap.put("/show", "jwtroles[user]");
         // 开放登陆接口
+        filterChainDefinitionMap.put("/swagger-ui.html", "anon");
+        filterChainDefinitionMap.put("/webjars/**", "anon");
+        filterChainDefinitionMap.put("/v2/**", "anon");
+        filterChainDefinitionMap.put("/swagger-resources/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         // 其余接口一律拦截
         // 主要这行代码必须放在所有权限设置的最后，不然会导致所有 url 都被拦截
-         filterChainDefinitionMap.put("/**", "anon");
-//        filterChainDefinitionMap.put("/**", "anon");
+      //   filterChainDefinitionMap.put("/**", "anon");
+        filterChainDefinitionMap.put("/**", "anthc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
     }

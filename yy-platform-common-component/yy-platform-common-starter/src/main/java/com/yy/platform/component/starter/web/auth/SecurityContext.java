@@ -1,6 +1,6 @@
 package com.yy.platform.component.starter.web.auth;
 
-import com.yy.platform.component.starter.web.auth.model.SysUser;
+import com.yy.platform.component.starter.web.auth.model.ISysUser;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,16 +19,16 @@ public class SecurityContext {
     /**
      * 当前用户
      */
-    private static ThreadLocal<SysUser> userLocal = new ThreadLocal<>();
+    private static ThreadLocal<ISysUser> userLocal = new ThreadLocal<>();
 
     private SecurityContext() {
     }
 
-    public static SysUser getUserPrincipal(){
+    public static ISysUser getUserPrincipal(){
         return userLocal.get();
     }
 
-    public static void setUserPrincipal(SysUser user){
+    public static void setUserPrincipal(ISysUser user){
         userLocal.set(user);
     }
 

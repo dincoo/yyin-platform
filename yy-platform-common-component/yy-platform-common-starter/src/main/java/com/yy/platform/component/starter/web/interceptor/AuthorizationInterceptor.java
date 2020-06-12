@@ -3,12 +3,9 @@ package com.yy.platform.component.starter.web.interceptor;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.yy.platform.component.starter.constants.ErrorCodeEnum;
 import com.yy.platform.component.starter.exception.AuthException;
-import com.yy.platform.component.starter.web.auth.model.SysUser;
 import com.yy.platform.component.starter.util.JwtTokenUtil;
 import com.yy.platform.component.starter.web.annotation.IgnoreAuth;
-import com.yy.platform.component.starter.web.auth.SecurityContext;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,6 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
@@ -56,7 +54,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
     }
 
 
-    private long checkToken(HttpServletRequest request) throws AuthException{
+    private String checkToken(HttpServletRequest request) throws AuthException{
 
         //从header中获取token
         String token = request.getHeader(LOGIN_TOKEN_KEY);
@@ -76,7 +74,7 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             throw new AuthException(ErrorCodeEnum.AUTH_TOKEN_ERROR.getCode(), ErrorCodeEnum.AUTH_TOKEN_ERROR.getDesc());
         }
 
-        long userId = JwtTokenUtil.getUserIdFromToken(token);
+        String userId = JwtTokenUtil.getUserIdFromToken(token);
 
         //设置userId到request里，后续根据userId，获取用户信息
         request.setAttribute(LOGIN_USER_KEY, userId);

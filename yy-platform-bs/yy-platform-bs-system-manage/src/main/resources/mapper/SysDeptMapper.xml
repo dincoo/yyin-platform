@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.vzoom.springboot.management.modules.sys.dao.SysDeptDao">
+	
+	<select id="queryDetpIdList" resultType="string">
+		select id_ from sys_dept where parent_id = #{value} and enable_ = 1
+	</select>
+
+</mapper>

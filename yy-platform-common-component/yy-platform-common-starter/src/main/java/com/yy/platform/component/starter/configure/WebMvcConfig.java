@@ -7,6 +7,8 @@ import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.yy.platform.component.starter.web.interceptor.AuthorizationInterceptor;
 import com.yy.platform.component.starter.web.resolver.LoginUserArgumentResolver;
+import com.yy.platform.component.starter.web.shiro.TokenSubjectUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -28,6 +30,9 @@ import java.util.List;
 @Configuration
 @ConditionalOnExpression("${yy.platform.serialize.fastjson.enabled:false}")
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Autowired
+    private TokenSubjectUtil tokenSubjectUtil;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -72,7 +77,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         /**
          * 注入登录用户解析器
          */
-        resolvers.add(new LoginUserArgumentResolver());
+        resolvers.add(new LoginUserArgumentResolver(tokenSubjectUtil));
         //TODO 注入应用信息
     }
 

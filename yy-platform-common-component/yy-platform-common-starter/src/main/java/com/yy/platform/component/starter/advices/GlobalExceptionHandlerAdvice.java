@@ -1,9 +1,12 @@
 package com.yy.platform.component.starter.advices;
+import com.yy.platform.component.starter.exception.ApiException;
 import com.yy.platform.component.starter.exception.BaseCustomizeException;
+import com.yy.platform.component.starter.result.R;
 import com.yy.platform.component.starter.result.ResultStatus;
 import com.yy.platform.component.starter.result.model.ResultData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -62,4 +65,19 @@ public class GlobalExceptionHandlerAdvice {
         return ResultData.failure(bce);
     }
 
+    @ExceptionHandler(ApiException.class)
+    public ResultData ApiExceptionHandler(ApiException e){
+        return ResultData.failure(e.getCode(),"",e.getMsg());
+    }
+
+    /**
+     * 接口权限异常全局捕获
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseBody
+    public R unauthorizedException(UnauthorizedException e){
+        return R.Builder.badReq().message("权限不足，无法操作").build();
+    }
 }

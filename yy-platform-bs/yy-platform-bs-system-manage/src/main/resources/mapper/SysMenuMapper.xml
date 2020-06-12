@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yy.platform.system.management.dao.SysMenuDao">
+
+    <select id="queryListParentId" resultType="com.yy.platform.system.management.entity.SysMenu">
+        select * from sys_menu where parent_id = #{parentId} order by order_num asc
+    </select>
+
+    <select id="queryNotButtonList" resultType="com.yy.platform.system.management.entity.SysMenu">
+        select * from sys_menu where type != 2 order by order_num asc
+    </select>
+
+    <select id="queryAllId" resultType="String">
+        select id_ from sys_menu
+    </select>
+
+    <select id="queryPermsByIds" resultType="String">
+        select perms from sys_menu where id_ in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+</mapper>

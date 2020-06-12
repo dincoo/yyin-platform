@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.yy.platform.system.management.dao.SysUserDao">
+
+	<!--&lt;!&ndash; 查询用户的所有权限 &ndash;&gt;
+	<select id="queryAllPerms" resultType="string">
+		select m.perms from sys_user_role ur
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+			LEFT JOIN sys_menu m on rm.menu_id = m.id_
+		where ur.user_id = #{userId}
+	</select>
+
+	&lt;!&ndash; 查询用户的所有菜单ID &ndash;&gt;
+	<select id="queryAllMenuId" resultType="string">
+		select distinct rm.menu_id from sys_user_role ur
+			LEFT JOIN sys_role_menu rm on ur.role_id = rm.role_id
+		where ur.user_id = #{userId}
+	</select>
+
+	<delete id="deleteBatch">
+		delete from sys_user where user_id in
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+		;
+		delete from sys_user_role where user_id in
+		<foreach item="userId" collection="array" open="(" separator="," close=")">
+			#{userId}
+		</foreach>
+	</delete>
+
+	&lt;!&ndash; 查询用户的所有权限 &ndash;&gt;
+	<select id="selectUserList" resultType="com.vzoom.springboot.management.modules.sys.entity.ISysUser">
+		select * from sys_user su
+		left join sys_user_role ur on su.id_ = ur.user_id
+		where su.id_ not in (select ua.user_id from vz_user_account ua) and  ur.role_id not in
+		<foreach collection="roleIds" item="roleId" index="index" open="(" close=")" separator=",">
+			#{roleId}
+		</foreach>
+	</select>
+	-->
+
+</mapper>

@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.yy.platform.component.starter.exception.AuthException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -39,7 +41,7 @@ public class JwtTokenUtil {
      * @param userId
      * @return
      */
-    public String createTokenByUserId(Long userId){
+    public String createTokenByUserId(String userId){
 
         return JWT.create().withIssuer(issuer)
                 .withExpiresAt(generateExpirationDate())
@@ -78,20 +80,22 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public static Long getUserIdFromToken(String token){
+    public static String getUserIdFromToken(String token){
         DecodedJWT jwt = JWT.decode(token);
-        return jwt.getClaim(CLAIM_KEY_USERID).asLong();
+        return jwt.getClaim(CLAIM_KEY_USERID).asString();
     }
 
     public static void main(String[] args) {
         JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
-        String token = jwtTokenUtil.createTokenByUserId(123456L);
+        String token = jwtTokenUtil.createTokenByUserId("2");
 //        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOjEyMzQ1NiwiY3JlYXRlZCI6MTU3NjcxNTYxNSwiaXNzIjoibWUtbWFsbCIsImV4cCI6MTU3NjcxNTkxNX0.d6-35QxglH_v_BND71n3Z9j2jtKWwzhnmtIBzKNPMVuTzFE27A8OyjjrTEte98wBUfc8LlrLBYLkSFBexfVOgw";
         System.out.println(token);
         try {
+            System.out.println("开始处理");
             jwtTokenUtil.verifyToken(token);
             System.out.println(JwtTokenUtil.getUserIdFromToken(token));
         } catch (Exception e) {
+            System.out.println("失败");
             e.printStackTrace();
         }
 

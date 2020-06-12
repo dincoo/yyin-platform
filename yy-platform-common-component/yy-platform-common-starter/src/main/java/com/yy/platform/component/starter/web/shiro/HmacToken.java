@@ -1,6 +1,6 @@
 package com.yy.platform.component.starter.web.shiro;
 
-import lombok.Data;
+import com.yy.platform.component.starter.web.auth.model.ISysUser;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,6 +17,7 @@ public class HmacToken implements AuthenticationToken {
     private String timeStamp;// 时间戳
     private Map<String, String[]> parameters;// 访问参数
     private String host;// 客户端IP
+    //private ISysUser sysUser;
 
     public HmacToken(String clientKey,String timeStamp,String digest
             ,String host,Map<String, String[]> parameters){
@@ -25,6 +26,7 @@ public class HmacToken implements AuthenticationToken {
         this.digest = digest;
         this.host = host;
         this.parameters = parameters;
+        //this.sysUser = sysUser;
     }
 
     @Override
@@ -36,4 +38,7 @@ public class HmacToken implements AuthenticationToken {
         return Boolean.TRUE;
     }
 
+    /*public ISysUser getSysUser() {
+        return sysUser;
+    }*/
 }
