@@ -11,6 +11,7 @@
     <description>业务模块</description>
     <modules>
         <module>yy-platform-bs-test</module>
+        <module>yy-platform-bs-system-manage</module>
     </modules>
     <artifactId>yy-platform-bs</artifactId>
     <version>0.0.1-SNAPSHOT</version>
