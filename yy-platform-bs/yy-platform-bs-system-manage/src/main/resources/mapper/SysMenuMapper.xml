@@ -8,7 +8,7 @@
     </select>
 
     <select id="queryNotButtonList" resultType="com.yy.platform.system.management.entity.SysMenu">
-        select * from sys_menu where type != 2 order by order_num asc
+        select * from sys_menu where type != 3 order by order_num asc
     </select>
 
     <select id="queryAllId" resultType="String">

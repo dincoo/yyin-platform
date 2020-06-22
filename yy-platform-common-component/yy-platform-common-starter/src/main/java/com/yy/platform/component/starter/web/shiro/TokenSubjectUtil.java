@@ -28,4 +28,8 @@ public class TokenSubjectUtil {
         ValueOperations<String, LoginUserInfo> operations = redisTemplate.opsForValue();
         return operations.get(key);
     }
+
+    public Boolean removeUser(String key) {
+        return redisTemplate.delete(key);
+    }
 }

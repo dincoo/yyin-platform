@@ -6,8 +6,12 @@ import com.yy.platform.component.starter.web.annotation.LoginUser;
 import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
 import com.yy.platform.system.management.contants.Constant;
 import com.yy.platform.system.management.entity.SysDept;
+import com.yy.platform.system.management.entity.SysRole;
+import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.SysDeptService;
-import com.yy.platform.system.management.utils.ShiroUtils;
+import com.yy.platform.system.management.service.SysRoleService;
+import com.yy.platform.system.management.service.SysUserService;
+import com.yy.platform.system.management.utils.ShiroUtils1;
 import com.yy.platform.system.management.utils.ToolForID;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -31,12 +35,14 @@ import java.util.List;
 public class SysDeptController {
 	@Autowired
 	private SysDeptService sysDeptService;
-	/*@Autowired
-    private SysUserService sysUserService;
-	@Autowired
-    private SysRoleService sysRoleService;*/
 
-	@RequiresPermissions("sys:dept:list")
+	@Autowired
+	private SysUserService sysUserService;
+
+	@Autowired
+	private SysRoleService sysRoleService;
+
+	//@RequiresPermissions("sys:dept:list")
 	@RequestMapping("")
 	public ModelAndView index(){
 		return new ModelAndView("sysManage/department");
@@ -59,13 +65,12 @@ public class SysDeptController {
 	@ApiOperation(value = "选择部门列表")
 	@GetMapping("/select")
 	@RequiresPermissions("sys:dept:select")
-	public R select(){
+	public R select(@LoginUser LoginUserInfo loginUserInfo){
 		List<SysDept> deptList = sysDeptService.queryList(new HashMap<String, Object>());
-		//TODO 获取操作的用户
-		//ISysUser sysUser = ShiroUtils.getUserEntity();
 
+		String userId = loginUserInfo.getId();
 		//超级管理员可操作，添加一级部门
-		if(ShiroUtils.getUserId() == Constant.SUPER_ADMIN){
+		if(Constant.SUPER_ADMIN.equals(userId)){
 			SysDept root = new SysDept();
 			root.setId("0");
 			root.setName("一级部门");
@@ -153,25 +158,25 @@ public class SysDeptController {
 	/**
 	 * 删除
 	 */
-	/*@DeleteMapping("/delete/{id}")
+	@ApiOperation(value = "删除部门信息")
+	@DeleteMapping("/delete/{id}")
 	//@SysLogAp("删除部门")
 	@RequiresPermissions("sys:dept:delete")
 	public Object delete(@PathVariable String id){
 		//判断是否有子部门
 		List<String> deptList = sysDeptService.queryDetpIdList(id);
 		//判断是否在管理员管理中被引用
-        List<ISysUser> sysUsers = sysUserService.list(new QueryWrapper<ISysUser>()
+        List<SysUser> sysUsers = sysUserService.list(new QueryWrapper<SysUser>()
                 .eq("dept_id", id));
         //判断是否在角色管理中被引用
         List<SysRole> sysRoles = sysRoleService.list(new QueryWrapper<SysRole>()
                 .eq("dept_id", id));
         if(!deptList.isEmpty() || !sysUsers.isEmpty() || !sysRoles.isEmpty()){
-			return setSuccessModelMap(0);
+			return R.Builder.badReq().message("该部门已被用户或角色引用，删除失败").build();
 		}
 
 		sysDeptService.removeById(id);
-		
-		return setSuccessModelMap(1);
-	}*/
+		return R.Builder.success().message("删除部门成功").build();
+	}
 	
 }

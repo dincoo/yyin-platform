@@ -67,7 +67,7 @@ public class ShiroTestController {
         String password = "abc";
 
         JwtTokenUtil jwtTokenUtil= new JwtTokenUtil();
-        String clientKey = jwtTokenUtil.createTokenByUserId(123456987L);
+        String clientKey = jwtTokenUtil.createTokenByUserId("123456987");
 
         //创建令牌
         Subject subject = SecurityUtils.getSubject();
@@ -77,7 +77,7 @@ public class ShiroTestController {
 
         Map resultMap = new HashMap();
         resultMap.put("token", clientKey);
-        TokenSubjectUtil.saveSubject(clientKey, subject);
+       // tokenSubjectUtil..saveSubject(clientKey, subject);
         return R.Builder.success(resultMap).build();
     }
 

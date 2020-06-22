@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig extends WebMvcConfigurationSupport {
+public class SwaggerConfig{
 
     @Bean
     public Docket createRestApi() {
@@ -46,10 +46,10 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
                         .apiInfo(new ApiInfoBuilder()
                         .title("管理系统")
                         .description("管理系统api接口说明")
-                        .version("9.0")
+                        .version("1.0")
                         .contact(new Contact("platform-developer", "", ""))
                         .license("The Apache License")
-                        .licenseUrl("http://www.baidu.com")
+                        .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0")
                         .build());
     }
 
@@ -58,10 +58,12 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
      *
      * @param registry
      */
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    /*protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         // 解决静态资源无法访问
         registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/static/");
+                .addResourceLocations("classpath:/resources/")
+                .addResourceLocations("classpath:/static")
+                .addResourceLocations("classpath:/public/");
         // 解决swagger无法访问
         registry.addResourceHandler("/swagger-ui.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
@@ -69,7 +71,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
-    }
+    }*/
 
     /*@Bean
     public Docket api(){

@@ -83,6 +83,8 @@ public class SysRole implements Serializable {
 	@TableField(exist=false)
 	private List<String> menuIdList;
 
+	@TableField(exist=false)
+	private List<String> apiPermIdList;
 
 	public String getCreateBy() {
 		return createBy;
@@ -180,18 +182,30 @@ public class SysRole implements Serializable {
 		this.deptName = deptName;
 	}
 
+	public List<String> getApiPermIdList() {
+		return apiPermIdList;
+	}
+
+	public void setApiPermIdList(List<String> apiPermIdList) {
+		this.apiPermIdList = apiPermIdList;
+	}
+
 	@Override
 	public String toString() {
-		return "Role{" +
-			"createBy=" + createBy +
-			", updateTime=" + updateTime +
-			", updateBy=" + updateBy +
-			", enable=" + enable +
-			", id=" + id +
-			", roleName=" + roleName +
-			", remark=" + remark +
-			", deptId=" + deptId +
-			", createTime=" + createTime +
-			"}";
+		return "SysRole{" +
+				"createBy='" + createBy + '\'' +
+				", updateTime=" + updateTime +
+				", updateBy='" + updateBy + '\'' +
+				", enable=" + enable +
+				", id='" + id + '\'' +
+				", roleName='" + roleName + '\'' +
+				", remark='" + remark + '\'' +
+				", deptId='" + deptId + '\'' +
+				", deptName='" + deptName + '\'' +
+				", createTime=" + createTime +
+				", deptIdList=" + deptIdList +
+				", menuIdList=" + menuIdList +
+				", apiPermIdList=" + apiPermIdList +
+				'}';
 	}
 }

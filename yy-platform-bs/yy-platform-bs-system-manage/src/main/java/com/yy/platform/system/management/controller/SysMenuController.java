@@ -1,16 +1,16 @@
 package com.yy.platform.system.management.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.yy.platform.component.starter.exception.ApiException;
 import com.yy.platform.component.starter.result.R;
 import com.yy.platform.component.starter.web.annotation.LoginUser;
 import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
 import com.yy.platform.system.management.contants.Constant;
-import com.yy.platform.system.management.entity.SysApiPerm;
 import com.yy.platform.system.management.entity.SysMenu;
 import com.yy.platform.system.management.service.SysMenuService;
-import com.yy.platform.system.management.utils.ShiroUtils;
 import com.yy.platform.system.management.vo.AsidebarMenuVo;
 import com.yy.platform.system.management.vo.ChildMenuVo;
+import com.yy.platform.system.management.vo.UserMenuVo;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -59,8 +59,8 @@ public class SysMenuController {
 	 */
 	@ApiOperation(value = "导航菜单")
 	@GetMapping("/nav")
-	public R nav(){
-		List<SysMenu> menuList = sysMenuService.getUserMenuList(ShiroUtils.getUserId());
+	public R nav(@LoginUser LoginUserInfo userInfo){
+		List<SysMenu> menuList = sysMenuService.getUserMenuList(userInfo.getId());
 		return R.Builder.success(menuList).build();
 	}
 	
@@ -204,7 +204,7 @@ public class SysMenuController {
 
         // 上级菜单类型
         int parentType = Constant.MenuType.MODULES.getValue();
-        if (!"0".equals(menu.getParentId())) {
+        if (!"-1".equals(menu.getParentId())) {
             SysMenu parentMenu = sysMenuService.getById(menu.getParentId());
             parentType = parentMenu.getType();
         }
@@ -242,11 +242,15 @@ public class SysMenuController {
     public Object listMenuByUserId(@LoginUser LoginUserInfo userInfo){
         List<AsidebarMenuVo> asidebarMenuVoList = new ArrayList<>();
         String userId = userInfo.getId();
+        //目录与菜单
+		//List<SysMenu> userMenuList = sysMenuService.listByIds(userInfo.getMenus());
         List<SysMenu> userMenuList = sysMenuService.getUserMenuList(userId);
         userMenuList.forEach(sysMenu -> {
             AsidebarMenuVo asidebarMenuVo = new AsidebarMenuVo();
+            asidebarMenuVo.setId(sysMenu.getId());
             asidebarMenuVo.setName(sysMenu.getName());
-            asidebarMenuVo.setUrl("#");
+            asidebarMenuVo.setParentId(sysMenu.getParentId());
+            asidebarMenuVo.setUrl(sysMenu.getUri());
             asidebarMenuVo.setIndexNum(sysMenu.getOrderNum().toString());
             asidebarMenuVo.setIconClass(sysMenu.getIcon());
             asidebarMenuVoList.add(asidebarMenuVo);
@@ -261,13 +265,29 @@ public class SysMenuController {
                 String uri = childSysMenu.getUri();
                 int lastIndex = uri.lastIndexOf("/");
                 String path = uri.substring(lastIndex+1);
-
+				childMenuVo.setParendId(sysMenu.getId());
                 childMenuVo.setId(path);
                 childMenuVo.setPath(uri);
                 asidebarMenuVo.getChildren().add(childMenuVo);
             });
 
         });
-        return R.Builder.success(asidebarMenuVoList).build();
+		//模块部分
+        List<AsidebarMenuVo> moduleMenuVoList = new ArrayList();
+		List<SysMenu> sysModuleMenus = sysMenuService.list(new QueryWrapper<SysMenu>().eq("type",Constant.MenuType.MODULES.getValue()));
+		sysModuleMenus.forEach(sysModuleMenu -> {
+			AsidebarMenuVo asidebarMenuVo = new AsidebarMenuVo();
+			asidebarMenuVo.setId(sysModuleMenu.getId());
+			asidebarMenuVo.setName(sysModuleMenu.getName());
+			asidebarMenuVo.setUrl(sysModuleMenu.getUri());
+			asidebarMenuVo.setIconClass(sysModuleMenu.getIcon());
+			asidebarMenuVo.setIndexNum(sysModuleMenu.getOrderNum().toString());
+			moduleMenuVoList.add(asidebarMenuVo);
+		});
+
+		UserMenuVo userMenuVo = new UserMenuVo();
+		userMenuVo.setAsider(asidebarMenuVoList);
+		userMenuVo.setModule(moduleMenuVoList);
+        return R.Builder.success(userMenuVo).build();
     }
 }

@@ -1,8 +1,6 @@
 package com.yy.platform.system.management.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yy.platform.component.starter.orm.util.Query;
 import com.yy.platform.component.starter.result.R;
 import com.yy.platform.component.starter.result.pager.PageResult;
 import com.yy.platform.component.starter.web.annotation.LoginUser;
@@ -10,7 +8,7 @@ import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
 import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.SysUserRoleService;
 import com.yy.platform.system.management.service.SysUserService;
-import com.yy.platform.system.management.utils.ShiroUtils;
+import com.yy.platform.system.management.utils.ShiroUtils1;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -18,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -91,7 +88,7 @@ public class SysUserController {
 	 */
 	/*@GetMapping("/info")
 	public Object info(){
-		return setSuccessModelMap(ShiroUtils.getUserEntity());
+		return setSuccessModelMap(ShiroUtils1.getUserEntity());
 	}*/
 
 	/**
@@ -104,9 +101,9 @@ public class SysUserController {
 		String newPassword = String.valueOf(params.get("newPassword"));
 		String password = String.valueOf(params.get("password"));
 		//原密码
-		password = ShiroUtils.sha256(password, "SALT");
+		password = ShiroUtils1.sha256(password, "SALT");
 		//新密码
-		newPassword = ShiroUtils.sha256(newPassword, "SALT");
+		newPassword = ShiroUtils1.sha256(newPassword, "SALT");
 
 		//更新密码
 		String userId = userInfo.getId();

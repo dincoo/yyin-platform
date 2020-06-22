@@ -5,12 +5,13 @@ import com.yy.platform.component.starter.constants.ErrorCodeEnum;
 import com.yy.platform.component.starter.exception.ApiException;
 import com.yy.platform.component.starter.exception.AuthException;
 import com.yy.platform.component.starter.util.JwtTokenUtil;
-import com.yy.platform.component.starter.web.auth.model.ISysUser;
 import com.yy.platform.component.starter.web.annotation.LoginUser;
+import com.yy.platform.component.starter.web.auth.model.ISysUser;
 import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
 import com.yy.platform.component.starter.web.shiro.TokenSubjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -27,6 +28,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
     public LoginUserArgumentResolver(TokenSubjectUtil tokenSubjectUtil) {
         this.tokenSubjectUtil = tokenSubjectUtil;
     }
+
 
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {

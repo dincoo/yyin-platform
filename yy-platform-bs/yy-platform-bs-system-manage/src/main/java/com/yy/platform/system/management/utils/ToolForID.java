@@ -138,4 +138,9 @@ public class ToolForID {
         String id = "BA" + OnlyCodeGenerator.distriId();
         return id;
     }
+
+    public static String getSysRoleApiPermId() {
+        String id = "RAP_" + OnlyCodeGenerator.distriId();
+        return id;
+    }
 }

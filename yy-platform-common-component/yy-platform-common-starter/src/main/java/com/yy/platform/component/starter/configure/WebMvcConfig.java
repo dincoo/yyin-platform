@@ -78,6 +78,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
          * 注入登录用户解析器
          */
         resolvers.add(new LoginUserArgumentResolver(tokenSubjectUtil));
+        //resolvers.add(new LoginUserArgumentResolver());
         //TODO 注入应用信息
     }
 
@@ -93,6 +94,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/resources/")
                 .addResourceLocations("classpath:/static")
                 .addResourceLocations("classpath:/public/");
+        // 解决swagger无法访问
+        registry.addResourceHandler("/swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+        // 解决swagger的js文件无法访问
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
     }
 

@@ -93,7 +93,7 @@ public class SysDataPermController {
 	@ApiOperation(value = "修改数据权限")
 	@PutMapping("/update")
 	@RequiresPermissions("sys:data:update")
-	public R update(@LoginUser LoginUserInfo userInfo,@RequestBody SysDataPerm sysDataPerm){
+	public R update(@LoginUser LoginUserInfo userInfo, @RequestBody SysDataPerm sysDataPerm){
 		//数据校验
 		//verifyForm(menu);
 

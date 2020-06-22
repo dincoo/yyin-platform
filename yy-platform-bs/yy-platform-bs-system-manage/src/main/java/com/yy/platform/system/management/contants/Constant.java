@@ -12,22 +12,26 @@ public class Constant {
      */
     public enum MenuType {
         /**
+         * 模块
+         */
+        MODULES(0),
+        /**
          * 目录
          */
-        CATALOG(0),
+        CATALOG(1),
         /**
          * 菜单
          */
-        MENU(1),
+        MENU(2),
         /**
          * 按钮
          */
-        BUTTON(2),
+        BUTTON(3);
 
         /*
          * MODULES
          */
-        MODULES(3);
+        //MODULES(3);
 
         private int value;
 

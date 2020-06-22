@@ -7,10 +7,9 @@ import com.yy.platform.component.starter.orm.util.Query;
 import com.yy.platform.component.starter.result.pager.PageResult;
 import com.yy.platform.system.management.contants.Constant;
 import com.yy.platform.system.management.dao.SysUserDao;
-import com.yy.platform.system.management.entity.SysApiPerm;
 import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.*;
-import com.yy.platform.system.management.utils.ShiroUtils;
+import com.yy.platform.system.management.utils.ShiroUtils1;
 import com.yy.platform.system.management.utils.ToolForID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -137,7 +136,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
     public boolean save(SysUser user) {
         user.setCreateTime(new Date());
         user.setId(ToolForID.getSysUserID());
-        user.setPasswd(ShiroUtils.sha256(user.getPasswd(), "SALT"));
+        user.setPasswd(ShiroUtils1.sha256(user.getPasswd(), "SALT"));
         int insertFlag = baseMapper.insert(user);
         // 保存用户与角色关系
         sysUserRoleService.saveOrUpdate(user.getId(), user.getRoleIdList());
@@ -151,7 +150,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
         if (StringUtils.isBlank(user.getPasswd())) {
             user.setPasswd(null);
         } else {
-            user.setPasswd(ShiroUtils.sha256(user.getPasswd(), "SALT"));
+            user.setPasswd(ShiroUtils1.sha256(user.getPasswd(), "SALT"));
         }
         user.setUpdateTime(new Date());
         this.updateById(user);
@@ -181,7 +180,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserDao, SysUser> impleme
             SysUser sysUser = new SysUser();
             sysUser.setId(id);
             //sysUser.setPasswd(sha256("abcd12345", "SALT"));
-            sysUser.setPasswd(ShiroUtils.sha256("abcd12345", "SALT"));
+            sysUser.setPasswd(ShiroUtils1.sha256("abcd12345", "SALT"));
             userList.add(sysUser);
         });
         return super.updateBatchById(userList);

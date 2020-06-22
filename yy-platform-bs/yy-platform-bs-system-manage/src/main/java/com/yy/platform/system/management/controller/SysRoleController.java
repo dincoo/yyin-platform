@@ -5,16 +5,13 @@ import com.yy.platform.component.starter.result.pager.PageResult;
 import com.yy.platform.component.starter.web.annotation.LoginUser;
 import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
 import com.yy.platform.system.management.entity.SysRole;
-import com.yy.platform.system.management.entity.SysRoleApiPerm;
 import com.yy.platform.system.management.entity.SysUser;
-import com.yy.platform.system.management.service.SysApiPermService;
 import com.yy.platform.system.management.service.SysRoleApiPermService;
 import com.yy.platform.system.management.service.SysRoleMenuService;
 import com.yy.platform.system.management.service.SysRoleService;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -57,9 +54,9 @@ public class SysRoleController {
 	@ApiOperation(value = "获取角色分页列表")
 	@GetMapping("/list")
 	@RequiresPermissions("sys:role:list")
-	@CacheEvict(value="users",allEntries=true)
-	public R list(@RequestBody Map<String, Object> params){
-
+	//@CacheEvict(value="users",allEntries=true)
+	public R list(@LoginUser LoginUserInfo loginUserInfo, @RequestParam Map<String, Object> params){
+		System.out.println(loginUserInfo.toString());
 		PageResult<SysUser> page = sysRoleService.queryPage(params);
 
 		return R.Builder.success(page).build();
@@ -89,6 +86,8 @@ public class SysRoleController {
 		List<String> menuIdList = sysRoleMenuService.queryMenuIdList(roleId);
 		role.setMenuIdList(menuIdList);
 
+		List<String> apiPermIdList = sysRoleApiPermService.queryPermIds(Arrays.asList(roleId));
+		role.setApiPermIdList(apiPermIdList);
 		return R.Builder.success(role).build();
 
 		/*SysDept sysDeptEntity = sysDeptService.selectById(role.getDeptId());

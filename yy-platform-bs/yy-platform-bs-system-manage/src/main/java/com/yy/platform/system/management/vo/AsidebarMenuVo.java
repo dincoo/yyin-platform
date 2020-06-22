@@ -5,11 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AsidebarMenuVo implements Serializable {
+    private String id;
     private String name;
     private String url;
     private String indexNum;
     private String iconClass;
+    private String parentId;
     private List<ChildMenuVo> children = new ArrayList<>(0);
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -49,5 +59,13 @@ public class AsidebarMenuVo implements Serializable {
 
     public void setChildren(List<ChildMenuVo> children) {
         this.children = children;
+    }
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 }

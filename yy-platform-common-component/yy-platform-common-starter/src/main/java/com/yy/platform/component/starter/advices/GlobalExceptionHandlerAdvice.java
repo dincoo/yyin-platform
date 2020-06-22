@@ -1,5 +1,6 @@
 package com.yy.platform.component.starter.advices;
 import com.yy.platform.component.starter.exception.ApiException;
+import com.yy.platform.component.starter.exception.AuthException;
 import com.yy.platform.component.starter.exception.BaseCustomizeException;
 import com.yy.platform.component.starter.result.R;
 import com.yy.platform.component.starter.result.ResultStatus;
@@ -79,5 +80,12 @@ public class GlobalExceptionHandlerAdvice {
     @ResponseBody
     public R unauthorizedException(UnauthorizedException e){
         return R.Builder.badReq().message("权限不足，无法操作").build();
+    }
+
+
+    @ExceptionHandler(AuthException.class)
+    @ResponseBody
+    public R authException(AuthException e){
+        return R.Builder.badReq().message("未登录").errorCode(e.getErrorCode()).build();
     }
 }

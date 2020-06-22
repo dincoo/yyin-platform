@@ -3,11 +3,12 @@ package com.yy.platform.system.management.vo;
 import java.io.Serializable;
 
 public class ChildMenuVo implements Serializable {
+    private String id;
     private String name;
     private String parentPath;
     private String path;
     private String indexNum;
-    private String id;
+    private String parendId;
 
     public String getId() {
         return id;
@@ -47,5 +48,13 @@ public class ChildMenuVo implements Serializable {
 
     public void setIndexNum(String indexNum) {
         this.indexNum = indexNum;
+    }
+
+    public String getParendId() {
+        return parendId;
+    }
+
+    public void setParendId(String parendId) {
+        this.parendId = parendId;
     }
 }

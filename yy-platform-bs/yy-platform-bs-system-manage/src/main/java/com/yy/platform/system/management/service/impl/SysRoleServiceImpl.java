@@ -9,6 +9,7 @@ import com.yy.platform.system.management.contants.Constant;
 import com.yy.platform.system.management.dao.SysRoleDao;
 import com.yy.platform.system.management.entity.SysRole;
 import com.yy.platform.system.management.entity.SysUser;
+import com.yy.platform.system.management.service.SysRoleApiPermService;
 import com.yy.platform.system.management.service.SysRoleMenuService;
 import com.yy.platform.system.management.service.SysRoleService;
 import com.yy.platform.system.management.service.SysUserRoleService;
@@ -41,6 +42,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
     private SysUserRoleService sysUserRoleService;
    // @Autowired
     //private SysDeptService sysDeptService;
+    @Autowired
+    private SysRoleApiPermService sysRoleApiPermService;
 
     @Override
     // @DataFilter(subDept = true, user = false)
@@ -72,8 +75,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         // 保存角色与菜单关系
         sysRoleMenuService.saveOrUpdate(role.getId(), role.getMenuIdList());
 
-        // 保存角色与部门关系
-        //sysRoleDeptService.saveOrUpdate(role.getId(), role.getDeptIdList());
+        // 保存角色与api的关系
+        sysRoleApiPermService.saveOrUpdate(role.getId(), role.getApiPermIdList());
         return flag > 0 ? true : false;
     }
 
@@ -87,8 +90,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
         // 更新角色与菜单关系
         sysRoleMenuService.saveOrUpdate(role.getId(), role.getMenuIdList());
 
-        // 保存角色与部门关系
-        //sysRoleDeptService.saveOrUpdate(role.getId(), role.getDeptIdList());
+        // 保存角色与api的关系
+        sysRoleApiPermService.saveOrUpdate(role.getId(), role.getApiPermIdList());
     }
 
     @Override
@@ -106,5 +109,8 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleDao, SysRole> impleme
 
         // 删除角色与用户关联
         sysUserRoleService.deleteBatch(roleIds);
+
+        //删除角色与接口权限
+        //删除角色与数据权限
     }
 }

@@ -48,6 +48,11 @@ public class HmacTokenFilter extends AccessControlFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
                                       Object mappedValue) throws Exception {
 
+
+
+
+
+
         IgnoreAuth annotation = null;
         if (mappedValue instanceof HandlerMethod) {
             annotation = ((HandlerMethod) mappedValue).getMethodAnnotation(IgnoreAuth.class);

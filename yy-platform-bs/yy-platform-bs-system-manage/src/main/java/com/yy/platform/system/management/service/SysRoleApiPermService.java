@@ -13,6 +13,7 @@ import java.util.List;
  */
 public interface SysRoleApiPermService extends IService<SysRoleApiPerm> {
 
+    void saveOrUpdate(String roleId, List<String> apiPermList);
     /**
      * 通过角色id查询接口权限列表
      * @param roleIds
@@ -22,8 +23,8 @@ public interface SysRoleApiPermService extends IService<SysRoleApiPerm> {
 
     /**
      * 批量删除
-     * @param perms
+     * @param roleId
      * @return
      */
-    int deleteBatch(String[] perms);
+    int deleteBatch(String[] roleId);
 }

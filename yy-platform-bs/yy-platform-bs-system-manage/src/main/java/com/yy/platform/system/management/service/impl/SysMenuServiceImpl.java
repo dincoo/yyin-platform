@@ -43,7 +43,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 	public List<SysMenu> getMenuApi(){
 		List<SysMenu> sysMenus = baseMapper.selectList(null);
 		for(SysMenu sysMenu : sysMenus){
-			if(Constant.MenuType.BUTTON.getValue() == sysMenu.getType()){
+			if(Constant.MenuType.MENU.getValue() == sysMenu.getType()){
 				List<SysMenuApiPerm> sysMenuApiPerms = sysMenuApiPermService.list(new QueryWrapper<SysMenuApiPerm>().eq("MENU_ID",sysMenu.getId()));
 				List<String> sysApiPermIds = sysMenuApiPerms.stream().map(x -> x.getApiPermId()).collect(Collectors.toList());
 				if(sysApiPermIds.size() > 0){
@@ -110,13 +110,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 	@Override
     //@Cacheable(value = "menus",key = "#userId + 'getUserMenuList'")
 	public List<SysMenu> getUserMenuList(String userId) {
+
+		List<String> menuIdList = new ArrayList<>();
 		//系统管理员，拥有最高权限
 		if(Constant.SUPER_ADMIN.equals(userId)){
-			return getAllMenuList(null);
+			menuIdList = baseMapper.queryAllId();
+		}else {
+			//用户菜单列表
+			menuIdList = sysUserService.queryAllMenuId(userId);
 		}
-		
-		//用户菜单列表
-		List<String> menuIdList = sysUserService.queryAllMenuId(userId);
 		return getAllMenuList(menuIdList);
 	}
 
@@ -159,7 +161,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 		//List<SysMenu> menuList = queryListParentId("0", menuIdList);
 	    if(menuIdList!=null){
 	        QueryWrapper<SysMenu> qw =new QueryWrapper<>();
-	        qw.eq("type", "0");
+	        qw.eq("type", Constant.MenuType.CATALOG.getValue());
 	        qw.orderByAsc("order_num");
 	        List<SysMenu> menuList = this.list(qw);
 	        List<SysMenu>userMenuList = new ArrayList<>();
@@ -172,7 +174,7 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 	        getMenuTreeList(userMenuList, menuIdList);
 	        return userMenuList;
 	    }else{
-	        List<SysMenu> menuList = queryListParentId("0", menuIdList); 
+	        List<SysMenu> menuList = queryListParentId("1", menuIdList);
 	        getMenuTreeList(menuList, menuIdList);
 	        return menuList;
 	    }
