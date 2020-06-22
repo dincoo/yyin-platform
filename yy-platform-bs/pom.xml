@@ -13,6 +13,7 @@
         <module>yy-platform-bs-test</module>
     </modules>
     <artifactId>yy-platform-bs</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 
