@@ -95,6 +95,9 @@ public class HmacRealm extends AuthorizingRealm {
      */
     //TODO 判断存在问题
     private void checkToken(String token){
+        if(StringUtils.isBlank(token)){
+            throw new AuthException("无token,非法请求", "checkToken");
+        }
         try {
             if(!jwtTokenUtil.verifyToken(token)){
                 throw new AuthException("非法请求", "checkToken");
@@ -102,7 +105,7 @@ public class HmacRealm extends AuthorizingRealm {
         } catch (TokenExpiredException e) {
             throw new AuthException("token已过期", "checkToken");
         } catch (Exception e){
-            throw new AuthException("非法请求", "checkToken");
+            throw new AuthException("401","token失效", "checkToken","鉴权失败");
         }
     }
 }

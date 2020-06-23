@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -86,7 +87,7 @@ public class SysApiPermController {
 	@ApiOperation(value = "保存接口权限")
 	@PostMapping("/save")
 	@RequiresPermissions("sys:api:save")
-	public R save(@LoginUser LoginUserInfo userInfo, @RequestBody SysApiPerm sysApiPerm){
+	public R save(@LoginUser LoginUserInfo userInfo, @RequestBody @Validated SysApiPerm sysApiPerm){
 		if(StringUtils.isBlank(sysApiPerm.getMenuId())){
 			return R.Builder.badReq().message("参数缺少菜单id").build();
 		}

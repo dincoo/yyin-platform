@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -22,24 +23,28 @@ public class SysApiPerm implements Serializable {
      * 部门名称
      */
     @TableField("NAME")
+    @NotNull(message = "接口名称不能为空")
     private String name;
 
     /**
      * 接口地址
      */
     @TableField("URI")
+    @NotNull(message = "接口地址不能为空")
     private String uri;
 
     /**
      * 权限值
      */
     @TableField("PERM")
+    @NotNull(message = "权限编号不能为空")
     private String perm;
 
     /**
      * 类型 - 系统接口1，业务接口2
      */
     @TableField("TYPE")
+    @NotNull(message = "接口类型不能为空")
     private Integer type;
 
     /**
