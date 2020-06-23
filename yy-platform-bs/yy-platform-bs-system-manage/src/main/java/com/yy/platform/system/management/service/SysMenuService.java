@@ -61,4 +61,10 @@ public interface SysMenuService extends IService<SysMenu> {
 	 */
 	List<String> queryPermsByIds(List<String> ids);
 
+	/**
+	 * 通过菜单id获取菜单列表
+	 * @param menuIdList
+	 * @return
+	 */
+	List<SysMenu> getUserMenuList2(List<String> menuIdList);
 }

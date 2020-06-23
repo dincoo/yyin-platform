@@ -243,8 +243,8 @@ public class SysMenuController {
         List<AsidebarMenuVo> asidebarMenuVoList = new ArrayList<>();
         String userId = userInfo.getId();
         //目录与菜单
-		//List<SysMenu> userMenuList = sysMenuService.listByIds(userInfo.getMenus());
-        List<SysMenu> userMenuList = sysMenuService.getUserMenuList(userId);
+		List<SysMenu> userMenuList = sysMenuService.getUserMenuList2(userInfo.getMenus());
+        //List<SysMenu> userMenuList = sysMenuService.getUserMenuList(userId);
         userMenuList.forEach(sysMenu -> {
             AsidebarMenuVo asidebarMenuVo = new AsidebarMenuVo();
             asidebarMenuVo.setId(sysMenu.getId());

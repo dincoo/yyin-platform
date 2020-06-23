@@ -11,8 +11,7 @@ import com.yy.platform.component.starter.web.shiro.HmacToken;
 import com.yy.platform.component.starter.web.shiro.TokenSubjectUtil;
 import com.yy.platform.system.management.contants.Constant;
 import com.yy.platform.system.management.entity.SysUser;
-import com.yy.platform.system.management.service.SysRoleService;
-import com.yy.platform.system.management.service.SysUserService;
+import com.yy.platform.system.management.service.*;
 import com.yy.platform.system.management.utils.ShiroUtils1;
 import com.yy.platform.system.management.vo.SysLoginVo;
 import io.swagger.annotations.ApiOperation;
@@ -45,6 +44,14 @@ public class SysLoginController {
     @Autowired
     private SysRoleService sysRoleService;
 
+    @Autowired
+    private SysMenuService sysMenuService;
+
+    @Autowired
+    private SysApiPermService sysApiPermService;
+
+    @Autowired
+    private SysDataPermService sysDataPermService;
    /* @Autowired
     private Producer producer;
 
@@ -119,9 +126,9 @@ public class SysLoginController {
         userDetail.setName(userName);
         userDetail.setRoles(sysUserService.queryRoles(userId));
         if (Constant.SUPER_ADMIN.equals(userId)) {
-            userDetail.setMenus(sysUserService.list().stream().map(menu->menu.getId()).collect(Collectors.toList()));
-            userDetail.setApiPerms(sysUserService.list().stream().map(apiPerm-> apiPerm.getId()).collect(Collectors.toList()));
-            userDetail.setDataPerms(sysUserService.list().stream().map(dataPerm->dataPerm.getId()).collect(Collectors.toList()));
+            userDetail.setMenus(sysMenuService.list().stream().map(menu->menu.getId()).collect(Collectors.toList()));
+            userDetail.setApiPerms(sysApiPermService.list().stream().map(apiPerm-> apiPerm.getPerm()).collect(Collectors.toList()));
+            userDetail.setDataPerms(sysDataPermService.list().stream().map(dataPerm->dataPerm.getId()).collect(Collectors.toList()));
         }else {
             userDetail.setMenus(sysUserService.queryAllMenuId(userId));
             userDetail.setApiPerms(sysUserService.queryApiPerms(userId));

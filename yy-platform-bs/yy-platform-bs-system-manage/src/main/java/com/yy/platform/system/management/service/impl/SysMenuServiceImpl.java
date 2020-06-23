@@ -122,6 +122,10 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuDao, SysMenu> impleme
 		return getAllMenuList(menuIdList);
 	}
 
+	public List<SysMenu> getUserMenuList2(List<String> menuIdList){
+		return getAllMenuList(menuIdList);
+	}
+
 	@Override
 	public Integer queryMaxId() {
     	List<String> idList = baseMapper.queryAllId();
