@@ -4,7 +4,7 @@
 <mapper namespace="com.vzoom.springboot.management.modules.sys.dao.SysDeptDao">
 	
 	<select id="queryDetpIdList" resultType="string">
-		select id_ from sys_dept where parent_id = #{value} and enable_ = 1
+		select id_ from sys_dept where parent_id = #{value}
 	</select>
 
 </mapper>
