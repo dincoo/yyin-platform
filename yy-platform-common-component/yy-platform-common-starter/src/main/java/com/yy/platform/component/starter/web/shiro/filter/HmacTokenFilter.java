@@ -2,6 +2,7 @@ package com.yy.platform.component.starter.web.shiro.filter;
 
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.yy.platform.component.starter.constants.ErrorCodeEnum;
+import com.yy.platform.component.starter.exception.ApiException;
 import com.yy.platform.component.starter.exception.AuthException;
 import com.yy.platform.component.starter.exception.BaseCustomizeException;
 import com.yy.platform.component.starter.util.JwtTokenUtil;
@@ -22,6 +23,9 @@ import org.springframework.web.method.HandlerMethod;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.security.Timestamp;
 
 /**基于HMAC（ 散列消息认证码）的无状态认证过滤器
@@ -71,7 +75,9 @@ public class HmacTokenFilter extends AccessControlFilter {
 
     @Override
     protected void postHandle(ServletRequest request, ServletResponse response) throws Exception {
+
         //TODO refresh token
+        System.out.println("进入这个方法了");
     }
 
     /**
@@ -102,14 +108,17 @@ public class HmacTokenFilter extends AccessControlFilter {
      */
     //TODO 判断存在问题
     private void checkToken(String token){
+        if(StringUtils.isBlank(token)){
+            throw new AuthException("无token,非法请求", "checkToken");
+        }
         try {
             if(!jwtTokenUtil.verifyToken(token)){
-                throw new AuthException("非法请求", "checkToken");
+                throw new AuthException("401","登录超时，请重新登录", "checkToken","鉴权失败");
             }
         } catch (TokenExpiredException e) {
-            throw new AuthException("token已过期", "checkToken");
+            throw new AuthException("登录超时，请重新登录", "checkToken");
         } catch (Exception e){
-            throw new AuthException("非法请求", "checkToken");
+            throw new AuthException("401","登录超时，请重新登录", "checkToken","鉴权失败");
         }
     }
 
@@ -128,5 +137,16 @@ public class HmacTokenFilter extends AccessControlFilter {
         }
 
         return token;
+    }
+
+    private void responseError(ServletResponse response, String message) {
+        try {
+            HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+            //设置编码，否则中文字符在重定向时会变为空字符串
+            message = URLEncoder.encode(message, "UTF-8");
+            httpServletResponse.sendRedirect("/common/unauthorized/" + message);
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 }

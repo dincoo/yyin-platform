@@ -82,10 +82,4 @@ public class GlobalExceptionHandlerAdvice {
         return R.Builder.badReq().message("权限不足，无法操作").build();
     }
 
-
-    @ExceptionHandler(AuthException.class)
-    @ResponseBody
-    public R authException(AuthException e){
-        return R.Builder.badReq().message("未登录").errorCode(e.getErrorCode()).build();
-    }
 }

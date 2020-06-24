@@ -100,12 +100,12 @@ public class HmacRealm extends AuthorizingRealm {
         }
         try {
             if(!jwtTokenUtil.verifyToken(token)){
-                throw new AuthException("非法请求", "checkToken");
+                throw new AuthException("登录超时，请重新登录", "checkToken");
             }
         } catch (TokenExpiredException e) {
-            throw new AuthException("token已过期", "checkToken");
+            throw new AuthException("登录超时，请重新登录", "checkToken");
         } catch (Exception e){
-            throw new AuthException("401","token失效", "checkToken","鉴权失败");
+            throw new AuthException("token失效，请重新登录", "checkToken");
         }
     }
 }
