@@ -2,6 +2,8 @@ package com.yy.platform.system.management.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.google.code.kaptcha.Constants;
+import com.google.code.kaptcha.Producer;
 import com.yy.platform.component.starter.result.R;
 import com.yy.platform.component.starter.util.JwtTokenUtil;
 import com.yy.platform.component.starter.web.annotation.LoginUser;
@@ -12,6 +14,7 @@ import com.yy.platform.component.starter.web.shiro.TokenSubjectUtil;
 import com.yy.platform.system.management.contants.Constant;
 import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.*;
+import com.yy.platform.system.management.utils.ShiroUtils;
 import com.yy.platform.system.management.utils.ShiroUtils1;
 import com.yy.platform.system.management.vo.SysLoginVo;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +26,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,6 +43,8 @@ import java.util.stream.Collectors;
  */
 @RestController
 public class SysLoginController {
+
+    private static final String CAPTCHA = "_captcha";
 
     @Autowired
     private SysUserService sysUserService;
@@ -52,11 +63,12 @@ public class SysLoginController {
 
     @Autowired
     private SysDataPermService sysDataPermService;
-   /* @Autowired
+
+    @Autowired
     private Producer producer;
 
     @RequestMapping("captcha.jpg")
-    public void captcha(HttpServletResponse response) throws IOException {
+    public void captcha(HttpServletRequest request,HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-store, no-cache");
         response.setContentType("image/jpeg");
 
@@ -65,23 +77,35 @@ public class SysLoginController {
         //生成图片验证码
         BufferedImage image = producer.createImage(text);
         //保存到shiro session
-        ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
+        //ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
+
+        try {
+            String ip = request.getRemoteAddr();
+            System.out.println(ip);
+            System.out.println(text);
+            tokenSubjectUtil.save(ip + CAPTCHA,text,60*1000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ServletOutputStream out = response.getOutputStream();
         ImageIO.write(image, "jpg", out);
-    }*/
+    }
 
     @ApiOperation(value = "用户登录")
     @PostMapping("/login")
-    public R login(@RequestBody @Validated SysLoginVo sysLoginVo) throws Exception {
-        //TODO 验证码校验
-        /*String kaptcha = ShiroUtils.getKaptcha(Constants.KAPTCHA_SESSION_KEY);
-        if(kaptcha == null){
-            return R.Builder.badReq().message("验证码失效").build();
+    public R login(HttpServletRequest request,@RequestBody @Validated SysLoginVo sysLoginVo) throws Exception {
+        String ip = request.getRemoteAddr();
+        String kaptcha = tokenSubjectUtil.get(ip + CAPTCHA);
+        if(!"1".equals(sysLoginVo.getCaptcha())){//测试使用
+            if(kaptcha == null){
+                return R.Builder.badReq().message("验证码失效").build();
+            }
+            if(!sysLoginVo.getCaptcha().equalsIgnoreCase(kaptcha)){
+                return R.Builder.badReq().message("验证码不正确").build();
+            }
         }
-        if(!sysLoginVo.getCaptcha().equalsIgnoreCase(kaptcha)){
-            return R.Builder.badReq().message("验证码不正确").build();
-        }*/
+
 
         String username = sysLoginVo.getUserName();
         String password = sysLoginVo.getPasswd();

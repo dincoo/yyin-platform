@@ -6,6 +6,8 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * TODO 改造通过cache 获取 subject
@@ -32,4 +34,27 @@ public class TokenSubjectUtil {
     public Boolean removeUser(String key) {
         return redisTemplate.delete(key);
     }
+
+
+    public void save(String key, String value){
+        ValueOperations<String, String> operations = redisTemplate.opsForValue();
+        operations.set(key,value);
+    }
+
+    public void save(String key, String value,long time){
+        ValueOperations<String, String> operations = redisTemplate.opsForValue();
+        operations.set(key,value);
+        //验证码过期时间
+        redisTemplate.expire(key, time, TimeUnit.MILLISECONDS);
+    }
+
+    public String get(String key){
+        ValueOperations<String, String> operations = redisTemplate.opsForValue();
+        return operations.get(key);
+    }
+
+    public Boolean remove(String key) {
+        return redisTemplate.delete(key);
+    }
+
 }
