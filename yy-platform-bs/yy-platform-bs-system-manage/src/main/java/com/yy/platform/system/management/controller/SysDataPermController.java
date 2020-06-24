@@ -1,19 +1,28 @@
 package com.yy.platform.system.management.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yy.platform.component.starter.orm.util.Query;
 import com.yy.platform.component.starter.result.R;
+import com.yy.platform.component.starter.result.pager.PageResult;
 import com.yy.platform.component.starter.web.annotation.LoginUser;
 import com.yy.platform.component.starter.web.auth.model.LoginUserInfo;
+import com.yy.platform.system.management.contants.Constant;
+import com.yy.platform.system.management.entity.SysApiPerm;
 import com.yy.platform.system.management.entity.SysDataPerm;
+import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.*;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -47,6 +56,32 @@ public class SysDataPermController {
 	public R list(){
 		List<SysDataPerm> apiPermList = sysPermService.list(null);
 		return R.Builder.success(apiPermList).build();
+	}
+
+	/**
+	 * "获取数据权限分页列表
+	 */
+	@ApiOperation(value = "获取数据权限分页列表{\"menuId\":\"1\",\"name\":\"\",\"number\":\"\",\"current\":1,\"size\":10}")
+	@PostMapping("/page")
+	@RequiresPermissions("sys:data:page")
+	public R<PageResult<SysDataPerm>> list(@RequestBody Map<String, Object> params){
+		String name = (String) params.get("name");
+		String number = (String) params.get("number");
+		String menuId = (String) params.get("menuId");
+		List<String> apiPermIds = sysMenuPermService.queryPermIds(menuId);
+		Page<SysDataPerm> page = sysPermService.page(new Query<SysDataPerm>(params).getPage(), new QueryWrapper<SysDataPerm>()
+				.in(!CollectionUtils.isEmpty(apiPermIds),"id",apiPermIds)
+				.eq(StringUtils.isNotBlank(name), "name", name)
+				.eq(StringUtils.isNotBlank(number), "number", number)
+				.apply(params.get(Constant.SQL_FILTER) != null, (String) params.get(Constant.SQL_FILTER))
+				.orderByDesc("CREATE_TIME"));
+
+		return R.Builder.success(PageResult.<SysUser>builder()
+				.data(page.getRecords())
+				.count(page.getTotal())
+				.current(page.getCurrent())
+				.size(page.getSize())
+				.build()).build();
 	}
 
 	/**
