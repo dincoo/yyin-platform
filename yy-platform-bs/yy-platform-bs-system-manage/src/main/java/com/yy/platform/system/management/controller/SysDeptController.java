@@ -159,12 +159,18 @@ public class SysDeptController {
 	 * 删除
 	 */
 	@ApiOperation(value = "删除部门信息")
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/delete")
 	//@SysLogAp("删除部门")
 	@RequiresPermissions("sys:dept:delete")
-	public Object delete(@PathVariable String id){
+	public Object delete(@RequestBody String[] ids){
+		// 先支持一次只能删除一个部门
+		if(null == ids || ids.length == 0 || ids.length > 1)
+			return R.Builder.badReq().message("一次只能删除一个部门").build();
+
+		String id = ids[0];
 		//判断是否有子部门
-		List<String> deptList = sysDeptService.queryDetpIdList(id);
+		List<SysDept> deptList = sysDeptService.list(new QueryWrapper<SysDept>()
+				.eq("parent_id",id));
 		//判断是否在管理员管理中被引用
         List<SysUser> sysUsers = sysUserService.list(new QueryWrapper<SysUser>()
                 .eq("dept_id", id));
