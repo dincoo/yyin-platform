@@ -44,6 +44,8 @@ import java.util.stream.Collectors;
 @RestController
 public class SysLoginController {
 
+
+
     private static final String CAPTCHA = "_captcha";
 
     @Autowired
@@ -77,13 +79,10 @@ public class SysLoginController {
         String text = producer.createText();
         //生成图片验证码
         BufferedImage image = producer.createImage(text);
-        //保存到shiro session
-        //ShiroUtils.setSessionAttribute(Constants.KAPTCHA_SESSION_KEY, text);
 
         try {
             String ip = request.getRemoteAddr();
-            System.out.println(ip);
-            System.out.println(text);
+
             tokenSubjectUtil.save(ip + CAPTCHA,text,60*1000);
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,7 +96,8 @@ public class SysLoginController {
     @PostMapping("/login")
     public R login(HttpServletRequest request,@RequestBody @Validated SysLoginVo sysLoginVo) throws Exception {
         String ip = request.getRemoteAddr();
-        String kaptcha = tokenSubjectUtil.get(ip + CAPTCHA);
+        //暂不校验
+        /*String kaptcha = tokenSubjectUtil.get(ip + CAPTCHA);
         if(!"1".equals(sysLoginVo.getCaptcha())){//测试使用
             if(kaptcha == null){
                 return R.Builder.badReq().message("验证码失效").build();
@@ -105,8 +105,7 @@ public class SysLoginController {
             if(!sysLoginVo.getCaptcha().equalsIgnoreCase(kaptcha)){
                 return R.Builder.badReq().message("验证码不正确").build();
             }
-        }
-
+        }*/
 
         String username = sysLoginVo.getUserName();
         String password = sysLoginVo.getPasswd();
