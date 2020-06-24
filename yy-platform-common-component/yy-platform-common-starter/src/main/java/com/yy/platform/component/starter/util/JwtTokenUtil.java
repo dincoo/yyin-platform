@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.yy.platform.component.starter.exception.AuthException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -85,6 +86,25 @@ public class JwtTokenUtil {
         return jwt.getClaim(CLAIM_KEY_USERID).asString();
     }
 
+    /**
+     * token校验
+     * @param token
+     */
+    public void checkToken(String token){
+        if(StringUtils.isBlank(token)){
+            throw new AuthException("无token,非法请求", "checkToken");
+        }
+        try {
+            if(!this.verifyToken(token)){
+                throw new AuthException("401","登录超时，请重新登录", "checkToken","鉴权失败");
+            }
+        } catch (TokenExpiredException e) {
+            throw new AuthException("登录超时，请重新登录", "checkToken");
+        } catch (Exception e){
+            throw new AuthException("401","登录超时，请重新登录", "checkToken","鉴权失败");
+        }
+    }
+
     public static void main(String[] args) {
         JwtTokenUtil jwtTokenUtil = new JwtTokenUtil();
         String token = jwtTokenUtil.createTokenByUserId("2");
@@ -100,5 +120,6 @@ public class JwtTokenUtil {
         }
 
     }
+
 
 }

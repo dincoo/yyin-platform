@@ -52,11 +52,6 @@ public class HmacTokenFilter extends AccessControlFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response,
                                       Object mappedValue) throws Exception {
 
-
-
-
-
-
         IgnoreAuth annotation = null;
         if (mappedValue instanceof HandlerMethod) {
             annotation = ((HandlerMethod) mappedValue).getMethodAnnotation(IgnoreAuth.class);
@@ -93,7 +88,7 @@ public class HmacTokenFilter extends AccessControlFilter {
                     ErrorCodeEnum.AUTH_TOKEN_EMPTY_FAIL.getDesc());
         }
         // 验证token
-        checkToken(token);
+        jwtTokenUtil.checkToken(token);
         String clientKey = jwtTokenUtil.createTokenByUserId(JwtTokenUtil.getUserIdFromToken(token));
         AuthenticationToken authToken = new HmacToken(clientKey, "2020-06-06 10:20:21", "digest", "host",null);
         getSubject(request,response).login(authToken);
@@ -107,20 +102,7 @@ public class HmacTokenFilter extends AccessControlFilter {
      * @param token
      */
     //TODO 判断存在问题
-    private void checkToken(String token){
-        if(StringUtils.isBlank(token)){
-            throw new AuthException("无token,非法请求", "checkToken");
-        }
-        try {
-            if(!jwtTokenUtil.verifyToken(token)){
-                throw new AuthException("401","登录超时，请重新登录", "checkToken","鉴权失败");
-            }
-        } catch (TokenExpiredException e) {
-            throw new AuthException("登录超时，请重新登录", "checkToken");
-        } catch (Exception e){
-            throw new AuthException("401","登录超时，请重新登录", "checkToken","鉴权失败");
-        }
-    }
+
 
     /**
      * 从请求头中获取token

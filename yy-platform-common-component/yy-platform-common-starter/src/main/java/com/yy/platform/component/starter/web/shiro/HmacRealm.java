@@ -36,8 +36,8 @@ public class HmacRealm extends AuthorizingRealm {
             throws AuthenticationException {
         HmacToken hmacToken = (HmacToken)token;
 
-        // TODO 校验Token有效性
-        checkToken(hmacToken.getClientKey());
+        // 校验Token有效性
+        jwtTokenUtil.checkToken(hmacToken.getClientKey());
 
 //        List<String> keys = Lists.newArrayList();
 //        for (String key:hmacToken.getParameters().keySet()){
@@ -89,23 +89,5 @@ public class HmacRealm extends AuthorizingRealm {
         return info;
     }
 
-    /**
-     * 进行token的校验
-     * @param token
-     */
-    //TODO 判断存在问题
-    private void checkToken(String token){
-        if(StringUtils.isBlank(token)){
-            throw new AuthException("无token,非法请求", "checkToken");
-        }
-        try {
-            if(!jwtTokenUtil.verifyToken(token)){
-                throw new AuthException("登录超时，请重新登录", "checkToken");
-            }
-        } catch (TokenExpiredException e) {
-            throw new AuthException("登录超时，请重新登录", "checkToken");
-        } catch (Exception e){
-            throw new AuthException("token失效，请重新登录", "checkToken");
-        }
-    }
+
 }
