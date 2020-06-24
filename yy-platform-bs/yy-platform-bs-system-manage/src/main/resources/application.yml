@@ -13,8 +13,6 @@ spring:
     type: redis
 server:
   port: 8080
-  servlet:
-    context-path: /management-platform
 
 
 #mybatis-plus:
