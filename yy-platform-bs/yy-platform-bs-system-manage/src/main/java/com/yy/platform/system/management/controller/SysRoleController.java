@@ -9,6 +9,7 @@ import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.SysRoleApiPermService;
 import com.yy.platform.system.management.service.SysRoleMenuService;
 import com.yy.platform.system.management.service.SysRoleService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.Map;
  * @author jaden
  * 
  */
+@Api(description="角色管理")
 @RestController
 @RequestMapping("/sys/role")
 public class SysRoleController {
@@ -37,17 +39,13 @@ public class SysRoleController {
 
 	@Autowired
 	private SysRoleApiPermService sysRoleApiPermService;
-	/*@Autowired
-	private SysRoleDeptService sysRoleDeptService;
-	@Autowired
-	private SysDeptService sysDeptService;*/
 
-	@RequiresPermissions("sys:role:list")
+	/*@RequiresPermissions("sys:role:list")
 	@RequestMapping("")
 	public ModelAndView index(){
 		return new ModelAndView("sysManage/role");
 	}
-
+*/
 	/**
 	 * 获取角色分页列表
 	 */

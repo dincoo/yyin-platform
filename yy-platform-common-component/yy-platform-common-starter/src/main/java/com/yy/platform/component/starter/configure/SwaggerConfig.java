@@ -1,17 +1,12 @@
-package com.yy.platform.system.management.config;
+package com.yy.platform.component.starter.configure;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
@@ -26,7 +21,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig{
+public class SwaggerConfig {
 
     @Bean
     public Docket createRestApi() {
@@ -42,8 +37,8 @@ public class SwaggerConfig{
                 .apis(RequestHandlerSelectors.basePackage("com.yy.platform.system.management.controller"))
                 .paths(PathSelectors.any())
                 .build()
-                        .globalOperationParameters(pars)
-                        .apiInfo(new ApiInfoBuilder()
+                .globalOperationParameters(pars)
+                .apiInfo(new ApiInfoBuilder()
                         .title("管理系统")
                         .description("管理系统api接口说明")
                         .version("1.0")
@@ -52,6 +47,7 @@ public class SwaggerConfig{
                         .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0")
                         .build());
     }
+
 
     /**
      * 防止@EnableMvc把默认的静态资源路径覆盖了，手动设置的方式

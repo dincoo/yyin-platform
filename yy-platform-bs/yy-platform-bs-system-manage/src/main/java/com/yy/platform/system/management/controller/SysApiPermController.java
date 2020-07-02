@@ -37,8 +37,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/sys/api")
 public class SysApiPermController {
-	@Autowired
-	private SysMenuService sysMenuService;
 
 	@Autowired
 	private SysApiPermService sysApiPermService;
@@ -47,11 +45,11 @@ public class SysApiPermController {
 	private SysMenuApiPermService sysMenuApiPermService;
 
 
-	@RequiresPermissions("sys:api:list")
+	/*@RequiresPermissions("sys:api:list")
 	@RequestMapping("")
 	public ModelAndView index(){
 		return new ModelAndView("backstage/pages/sysManage/menu");
-	}
+	}*/
 	
 	/**
 	 * 所有api接口列表

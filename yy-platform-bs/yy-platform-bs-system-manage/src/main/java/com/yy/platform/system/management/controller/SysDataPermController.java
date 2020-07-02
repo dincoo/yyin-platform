@@ -12,6 +12,7 @@ import com.yy.platform.system.management.entity.SysApiPerm;
 import com.yy.platform.system.management.entity.SysDataPerm;
 import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.*;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,6 +30,7 @@ import java.util.Map;
  * 数据权限
  * 
  */
+@Api(description="数据权限管理")
 @RestController
 @RequestMapping("/sys/data")
 public class SysDataPermController {
@@ -41,11 +43,11 @@ public class SysDataPermController {
 	@Autowired
 	private SysMenuDataPermService sysMenuPermService;
 
-	@RequiresPermissions("sys:data:list")
+	/*@RequiresPermissions("sys:data:list")
 	@RequestMapping("")
 	public ModelAndView index(){
 		return new ModelAndView("backstage/pages/sysManage/menu");
-	}
+	}*/
 	
 	/**
 	 * 所有数据权限列表

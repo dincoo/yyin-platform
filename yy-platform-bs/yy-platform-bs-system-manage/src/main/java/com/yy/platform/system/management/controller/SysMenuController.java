@@ -11,6 +11,7 @@ import com.yy.platform.system.management.service.SysMenuService;
 import com.yy.platform.system.management.vo.AsidebarMenuVo;
 import com.yy.platform.system.management.vo.ChildMenuVo;
 import com.yy.platform.system.management.vo.UserMenuVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -29,6 +30,7 @@ import java.util.List;
  * @author jaden
  * 
  */
+@Api(description="菜单管理")
 @RestController
 @RequestMapping("/sys/menu")
 public class SysMenuController {
@@ -36,12 +38,12 @@ public class SysMenuController {
 	private SysMenuService sysMenuService;
 
 
-	@RequiresPermissions("sys:menu:list")
+	/*@RequiresPermissions("sys:menu:list")
 	@RequestMapping("")
 	public ModelAndView index(){
 		return new ModelAndView("backstage/pages/sysManage/menu");
 	}
-
+*/
 	/**
 	 * 查询菜单，含接口权限列表
 	 * @return

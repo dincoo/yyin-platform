@@ -13,6 +13,7 @@ import com.yy.platform.system.management.service.SysRoleService;
 import com.yy.platform.system.management.service.SysUserService;
 import com.yy.platform.system.management.utils.ShiroUtils1;
 import com.yy.platform.system.management.utils.ToolForID;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,7 @@ import java.util.List;
  * @author jaden
  * 
  */
+@Api(description="部门管理")
 @RestController
 @RequestMapping("/sys/dept")
 public class SysDeptController {
@@ -43,10 +45,10 @@ public class SysDeptController {
 	private SysRoleService sysRoleService;
 
 	//@RequiresPermissions("sys:dept:list")
-	@RequestMapping("")
-	public ModelAndView index(){
+	//@RequestMapping("")
+	/*public ModelAndView index(){
 		return new ModelAndView("sysManage/department");
-	}
+	}*/
 	
 	/**
 	 * 列表

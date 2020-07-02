@@ -9,6 +9,7 @@ import com.yy.platform.system.management.entity.SysUser;
 import com.yy.platform.system.management.service.SysUserRoleService;
 import com.yy.platform.system.management.service.SysUserService;
 import com.yy.platform.system.management.utils.ShiroUtils1;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -25,6 +26,7 @@ import java.util.Map;
  * @author jaden
  *
  */
+@Api(description="用户管理")
 @RestController
 @RequestMapping("/sys/user")
 public class SysUserController {
@@ -34,14 +36,6 @@ public class SysUserController {
 
     @Autowired
     private SysUserRoleService sysUserRoleService;
-    //@Autowired
-    //private SysDeptService sysDeptService;
-
-	/*@RequestMapping("/test")
-	public String index(){
-		return "test111";
-	}
-*/
 
 
     //@RequiresPermissions("sys:user:list")

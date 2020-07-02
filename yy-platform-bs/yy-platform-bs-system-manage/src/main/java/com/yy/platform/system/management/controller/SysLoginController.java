@@ -17,6 +17,7 @@ import com.yy.platform.system.management.service.*;
 import com.yy.platform.system.management.utils.ShiroUtils;
 import com.yy.platform.system.management.utils.ShiroUtils1;
 import com.yy.platform.system.management.vo.SysLoginVo;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
  * 登录相关
  *
  */
+@Api(description="登录退出相关")
 @RestController
 public class SysLoginController {
 
